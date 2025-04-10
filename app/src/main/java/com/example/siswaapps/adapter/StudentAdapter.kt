@@ -1,10 +1,12 @@
 package com.example.siswaapps.adapter
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.example.siswaapps.DetailStudentActivity
 import com.example.siswaapps.databinding.ItemStudentBinding
 import com.example.siswaapps.db.Student
 
@@ -25,6 +27,16 @@ class StudentAdapter : ListAdapter<Student, StudentAdapter.StudentViewHolder>(Di
         fun bind(student: Student) {
             binding.tvNis.text = student.nis
             binding.tvName.text = student.fullName
+
+            binding.root.setOnClickListener {
+                val context = binding.root.context
+                val intent = Intent(context, DetailStudentActivity::class.java).apply {
+                    putExtra(DetailStudentActivity.EXTRA_STUDENT_ID, student.id)
+                    putExtra(DetailStudentActivity.EXTRA_STUDENT_NIS, student.nis)
+                    putExtra(DetailStudentActivity.EXTRA_STUDENT_NAME, student.fullName)
+                }
+                context.startActivity(intent)
+            }
         }
     }
 

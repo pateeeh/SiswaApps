@@ -13,7 +13,6 @@ import com.example.siswaapps.db.Student
 class AddStudentActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddStudentBinding
-
     private val studentViewModel: StudentViewModel by viewModels {
         StudentViewModelFactory((application as SiswaApps).repository)
     }
