@@ -23,7 +23,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         binding.fabAdd.setOnClickListener {
-            val intent = Intent(this, AddStudentActivity::class.java)
+            val intent = Intent(this, AddUpdateStudentActivity::class.java)
             startActivity(intent)
         }
 

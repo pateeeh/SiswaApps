@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
+import androidx.room.Update
 
 @Dao
 interface StudentDao {
@@ -15,9 +16,15 @@ interface StudentDao {
     @Delete
     suspend fun delete(student: Student)
 
+    @Update
+    suspend fun update(student: Student)
+
     @Query("SELECT * FROM student ORDER BY full_name ASC")
     fun getAllStudents(): LiveData<List<Student>>
 
     @Query("SELECT * FROM student WHERE nis LIKE :query OR full_name LIKE :query ORDER BY full_name ASC")
     fun searchStudents(query: String): LiveData<List<Student>>
+
+    @Query("SELECT * FROM student WHERE id = :id")
+    fun getStudentById(id: Int): LiveData<Student>
 }

@@ -12,6 +12,10 @@ class StudentViewModel(private val repository: StudentRepository) : ViewModel() 
 
     fun searchStudents(query: String): LiveData<List<Student>> = repository.searchStudents(query)
 
+    fun getStudentById(id: Int): LiveData<Student> {
+        return repository.getStudentById(id)
+    }
+
     fun insert(student: Student) {
         viewModelScope.launch {
             repository.insert(student)
@@ -21,6 +25,12 @@ class StudentViewModel(private val repository: StudentRepository) : ViewModel() 
     fun delete(student: Student) {
         viewModelScope.launch {
             repository.delete(student)
+        }
+    }
+
+    fun update(student: Student) {
+        viewModelScope.launch {
+            repository.update(student)
         }
     }
 

@@ -1,5 +1,6 @@
 package com.example.siswaapps
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -15,8 +16,6 @@ class DetailStudentActivity : AppCompatActivity() {
         StudentViewModelFactory((application as SiswaApps).repository)
     }
     private var studentId: Int = 0
-    private var studentNis: String = ""
-    private var studentName: String = ""
 
     companion object {
         const val EXTRA_STUDENT_ID = "extra_student_id"
@@ -30,14 +29,30 @@ class DetailStudentActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         studentId = intent.getIntExtra(EXTRA_STUDENT_ID, 0)
-        studentNis = intent.getStringExtra(EXTRA_STUDENT_NIS) ?: ""
-        studentName = intent.getStringExtra(EXTRA_STUDENT_NAME) ?: ""
 
-        binding.tvNis.text = studentNis
-        binding.tvName.text = studentName
+        // Observasi data siswa berdasarkan ID
+        observeStudentData()
 
         binding.btnDelete.setOnClickListener {
             deleteDialog()
+        }
+
+        binding.btnUpdate.setOnClickListener {
+            val intent = Intent(this, AddUpdateStudentActivity::class.java).apply {
+                putExtra(AddUpdateStudentActivity.EXTRA_STUDENT_ID, studentId)
+                putExtra(AddUpdateStudentActivity.EXTRA_STUDENT_NIS, binding.tvNis.text.toString())
+                putExtra(AddUpdateStudentActivity.EXTRA_STUDENT_NAME, binding.tvName.text.toString())
+            }
+            startActivity(intent)
+        }
+    }
+
+    private fun observeStudentData() {
+        studentViewModel.getStudentById(studentId).observe(this) { student ->
+            if (student != null) {
+                binding.tvNis.text = student.nis
+                binding.tvName.text = student.fullName
+            }
         }
     }
 
@@ -53,7 +68,7 @@ class DetailStudentActivity : AppCompatActivity() {
     }
 
     private fun deleteStudent() {
-        val student = Student(id = studentId, nis = studentNis, fullName = studentName)
+        val student = Student(id = studentId, nis = binding.tvNis.text.toString(), fullName = binding.tvName.text.toString())
         studentViewModel.delete(student)
         Toast.makeText(this, "Data siswa berhasil dihapus", Toast.LENGTH_SHORT).show()
         finish()
